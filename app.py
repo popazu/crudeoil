@@ -32,7 +32,8 @@ elif interval_type == 'Yearly':
     title = f'Last {years} Years'
 
 # Selectbox to choose the chart type
-chart_type = st.selectbox("Select indicator to visualize", ("ADX, +DI, -DI", "RSI", "MACD", "ATR"))
+chart_type = st.selectbox("Select indicator to visualize", 
+                          ("ADX, +DI, -DI", "RSI", "MACD", "ATR", "Bollinger Bands", "OBV", "Stochastic Oscillator"))
 
 # If the user chooses the "ADX, +DI, -DI" chart
 if chart_type == "ADX, +DI, -DI":
@@ -142,3 +143,96 @@ elif chart_type == "ATR":
     )
 
     st.plotly_chart(fig4, use_container_width=True)
+
+# If the user chooses the "Bollinger Bands" chart
+elif chart_type == "Bollinger Bands":
+    fig5 = make_subplots(rows=1, cols=1)
+
+    fig5.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['BB_upper'], 
+        mode='lines', 
+        name='Upper Band', 
+        line=dict(color='red')
+    ), row=1, col=1)
+
+    fig5.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['BB_mid'], 
+        mode='lines', 
+        name='Middle Band', 
+        line=dict(color='yellow')
+    ), row=1, col=1)
+
+    fig5.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['BB_lower'], 
+        mode='lines', 
+        name='Lower Band', 
+        line=dict(color='green')
+    ), row=1, col=1)
+
+    fig5.update_layout(
+        template='plotly_dark',
+        title=f'Bollinger Bands - {title}',
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor='black',
+        paper_bgcolor='black'
+    )
+
+    st.plotly_chart(fig5, use_container_width=True)
+
+# If the user chooses the "OBV" chart
+elif chart_type == "OBV":
+    fig6 = make_subplots(rows=1, cols=1)
+
+    fig6.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['OBV'], 
+        mode='lines', 
+        name='OBV', 
+        line=dict(color='purple')
+    ), row=1, col=1)
+
+    fig6.update_layout(
+        template='plotly_dark',
+        title=f'On-Balance Volume (OBV) - {title}',
+        xaxis_title='Date',
+        yaxis_title='OBV',
+        plot_bgcolor='black',
+        paper_bgcolor='black'
+    )
+
+    st.plotly_chart(fig6, use_container_width=True)
+
+# If the user chooses the "Stochastic Oscillator" chart
+elif chart_type == "Stochastic Oscillator":
+    fig7 = make_subplots(rows=1, cols=1)
+
+    fig7.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['Stoch_K'], 
+        mode='lines', 
+        name='%K', 
+        line=dict(color='blue')
+    ), row=1, col=1)
+
+    fig7.add_trace(go.Scatter(
+        x=df_filtered['Date'], 
+        y=df_filtered['Stoch_D'], 
+        mode='lines', 
+        name='%D', 
+        line=dict(color='red')
+    ), row=1, col=1)
+
+    fig7.update_layout(
+        template='plotly_dark',
+        title=f'Stochastic Oscillator - {title}',
+        xaxis_title='Date',
+        yaxis_title='Value',
+        plot_bgcolor='black',
+        paper_bgcolor='black'
+    )
+
+    st.plotly_chart(fig7, use_container_width=True)
